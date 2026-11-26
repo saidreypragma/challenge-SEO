@@ -1,1 +1,23 @@
-<p>producto-detalle works!</p>
+<nav aria-label="Ruta de navegación">
+  <a routerLink="/">Inicio</a> &gt;
+  <a routerLink="/productos">Productos</a>
+  <ng-container *ngIf="producto"> &gt; {{ producto.nombre }}</ng-container>
+</nav>
+
+<ng-container *ngIf="producto; else noEncontrado">
+  <article>
+    <h1>{{ producto.nombre }}</h1>
+    <p>{{ producto.descripcion }}</p>
+    <p>
+      <strong>{{ producto.precio | currency: producto.moneda : 'symbol-narrow' : '1.0-0' }}</strong>
+      <span *ngIf="producto.disponible"> · Disponible</span>
+      <span *ngIf="!producto.disponible"> · Agotada</span>
+    </p>
+    <a routerLink="/carrito">Agregar al carrito</a>
+  </article>
+</ng-container>
+
+<ng-template #noEncontrado>
+  <h1>Producto no encontrado</h1>
+  <p>No encontramos esa camiseta. Mira el <a routerLink="/productos">catálogo completo</a>.</p>
+</ng-template>
