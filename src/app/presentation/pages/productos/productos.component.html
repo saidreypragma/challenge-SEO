@@ -1,1 +1,14 @@
-<p>productos works!</p>
+<nav aria-label="Ruta de navegación">
+  <a routerLink="/">Inicio</a> &gt; Productos
+</nav>
+
+<h1>Catálogo de camisetas</h1>
+<p>Lisas, cómodas y hechas para durar. Elige la tuya.</p>
+
+<ul>
+  <li *ngFor="let producto of productos">
+    <h2><a [routerLink]="['/productos', producto.slug]">{{ producto.nombre }}</a></h2>
+    <p>{{ producto.descripcion }}</p>
+    <p><strong>{{ producto.precio | currency: producto.moneda : 'symbol-narrow' : '1.0-0' }}</strong></p>
+  </li>
+</ul>

@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { NavigationEnd, Router } from '@angular/router';
+import { NavigationEnd, NavigationStart, Router } from '@angular/router';
 import { SeoService } from './core/seo.service';
 import { filter } from 'rxjs/operators';
+import { SchemasService } from './seo-schemas/schemas.service';
 
 @Component({
   selector: 'app-root',
@@ -11,10 +12,14 @@ import { filter } from 'rxjs/operators';
 export class AppComponent implements OnInit {
   title = 'seo-app';
 
-  constructor(private router: Router, private seoService: SeoService) { }
+  constructor(private router: Router,
+    private seoService: SeoService,
+    private schemasService: SchemasService
+  ) { }
 
   ngOnInit(): void {
     this.listenToRouteChanges();
+    this.clearSchemasOnNavigation();
   }
 
   private listenToRouteChanges(): void {
@@ -35,6 +40,12 @@ export class AppComponent implements OnInit {
         const path = this.router.url.split('?')[0];
         this.seoService.updateCanonical(path);
       });
+  }
+
+  private clearSchemasOnNavigation(): void {
+    this.router.events
+      .pipe(filter((event) => event instanceof NavigationStart))
+      .subscribe(() => this.schemasService.clearSchemas());
   }
 
 }
